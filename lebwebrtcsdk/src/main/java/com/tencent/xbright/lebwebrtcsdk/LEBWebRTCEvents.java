@@ -9,7 +9,7 @@ public interface LEBWebRTCEvents {
     {
         // 开始建立连接
         STATE_BEGIN,
-        // OFFER回应
+        // OFFER创建
         STATE_OFFER_CREATED,
         // ICE完成
         STATE_ICE_COMPLETED,
