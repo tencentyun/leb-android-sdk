@@ -1,0 +1,2 @@
+include ':lebwebrtcsdk'
+rootProject.name='leb_android_sdk'
