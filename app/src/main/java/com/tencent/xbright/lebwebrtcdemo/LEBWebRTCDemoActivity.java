@@ -33,6 +33,9 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
     private TextView         mStatsView;
     private FrameLayout      mVideoViewLayout;
     private boolean          mShowStats = true;
+    private String           mRequestPullUrl = "https://live.rtc.qq.com:8687/webrtc/v1/pullstream";//请求拉流
+    private String           mRequestStopUrl = "https://live.rtc.qq.com:8687/webrtc/v1/stopstream";//停止拉流
+    private String           mSvrSig;//服务器签名，后面每个请求必须携带这个字段内容, 业务无需理解字段内容
 
     private int  mVideoViewLayoutWidth = 0;
     private int  mVideoViewLayoutHeight = 0;
@@ -86,7 +89,7 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
     protected void onStop() {
         Log.v(TAG, "onStop");
         super.onStop();
-        mWebRTCView.stopPlay();
+        signalingStop();
     }
 
     private void makeFullScreen() {
@@ -197,13 +200,80 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
     }
 
     // 向信令服务器发送offer，获取remote sdp, 通过setRemoteSDP接口设置给sdk
-    private void signalingStart (final String sdp) {
-         //"需要用户实现信令请求，发送offer，并获取remote sdp"
+    private void signalingStart(final String sdp) {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject lsdp = new JSONObject();
+        jsonPut(lsdp,"sdp", sdp);
+        jsonPut(lsdp,"type", "offer");
+        jsonPut(jsonObject,"localsdp", lsdp);
+        jsonPut(jsonObject,"sessionid", "xxxxxx");//业务生成的唯一key, 标识本次拉流, 用户可自定义
+        jsonPut(jsonObject,"clientinfo", "xxxxxx");//终端类型信息, 用户可自定义
+
+        jsonPut(jsonObject,"streamurl", mLEBWebRTCParameters.getStreamUrl());
+        Log.d(TAG, "Connecting to signaling server: " + mRequestPullUrl);
+        Log.d(TAG, "send offer sdp: " + sdp);
+        AsyncHttpURLConnection httpConnection =
+                new AsyncHttpURLConnection("POST", mRequestPullUrl, jsonObject.toString(), "origin url", "application/json", new AsyncHttpURLConnection.AsyncHttpEvents() {
+                    @Override
+                    public void onHttpError(String errorMessage) {
+                        Log.e(TAG, "connection error: " + errorMessage);
+                        //events.onSignalingParametersError(errorMessage);
+                    }
+
+                    @Override
+                    public void onHttpComplete(String response) {
+                        try {
+                            JSONObject json = new JSONObject(response);
+                            int errcode = json.optInt("errcode");
+                            mSvrSig = json.optString("svrsig");
+                            JSONObject rsdp = new JSONObject(json.optString("remotesdp"));
+                            String type = rsdp.optString("type");
+                            String sdp = (rsdp.optString("sdp"));
+                            Log.d(TAG, "response from signaling server: " + response);
+                            Log.d(TAG, "svrsig info: " + mSvrSig);
+                            if (errcode == 0 && type.equals("answer") && sdp.length() > 0) {
+                                Log.d(TAG, "answer sdp = " + sdp);
+                                mWebRTCView.setRemoteSDP(sdp);
+                            }
+                        } catch (JSONException e) {
+                            Log.d(TAG, "response JSON parsing error: " + e.toString());
+                        }
+                    }
+                });
+        httpConnection.send();
     }
 
     //向信令服务器请求停流
-    private void signalingStop () {
-        //"需要用户实现停流请求"
+    private void signalingStop() {
+        JSONObject jsonObject = new JSONObject();
+        jsonPut(jsonObject,"streamurl", mLEBWebRTCParameters.getStreamUrl());
+        jsonPut(jsonObject,"svrsig", mSvrSig);
+        AsyncHttpURLConnection httpConnection =
+                new AsyncHttpURLConnection("POST", mRequestStopUrl, jsonObject.toString(), "origin url", "application/json", new AsyncHttpURLConnection.AsyncHttpEvents() {
+                    @Override
+                    public void onHttpError(String errorMessage) {
+                        Log.e(TAG, "connection error: " + errorMessage);
+                        //events.onSignalingParametersError(errorMessage);
+                    }
+
+                    @Override
+                    public void onHttpComplete(String response) {
+                        try {
+                            JSONObject json = new JSONObject(response);
+                            int errcode = json.optInt("errcode");
+                            String errMsg = json.optString("errmsg");
+                            Log.d(TAG, "response from signling server: " + response);
+                            if (errcode == 0) {
+                                Log.d(TAG,"request to stop success");
+                                mWebRTCView.stopPlay();
+                                mWebRTCView.release();
+                            }
+                        } catch (JSONException e) {
+                            Log.d(TAG, "response JSON parsing error: " + e.toString());
+                        }
+                    }
+                });
+        httpConnection.send();
     }
 
 }
