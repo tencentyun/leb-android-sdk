@@ -9,8 +9,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import com.tencent.xbright.lebwebrtcdemo.R;
 import com.tencent.xbright.lebwebrtcsdk.LEBWebRTCStatsReport;
@@ -61,7 +59,7 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
         Log.d(TAG, "set stream url: " + mWebRTCUrl);
         mLEBWebRTCParameters = new LEBWebRTCParameters();
         mLEBWebRTCParameters.setStreamUrl(mWebRTCUrl);
-        mLEBWebRTCParameters.setLoggingSeverity(LEBWebRTCParameters.LOG_VERBOSE);
+        mLEBWebRTCParameters.setLoggingSeverity(LEBWebRTCParameters.LOG_NONE);
         mLEBWebRTCParameters.enableHwDecode(true);
         mLEBWebRTCParameters.setConnectionTimeOutInMs(5000);//5s
         mLEBWebRTCParameters.setStatsReportPeriodInMs(1000);
