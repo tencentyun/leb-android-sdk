@@ -54,7 +54,6 @@ https://live.rtc.qq.com:8687/webrtc/v1/firstframeusetime    //首帧耗时上报
 - seipass：可选参数，默认不填。表示是否需要 SEI 包，是填1，不是填0
 
 - errcode：值为0，则表示请求拉流成功，非0则表示失败，具体失败原因参考errmsg
-  - 100010 流不存在
   - 100011 参数 clientip 为无效IP
 
 ## 【必选】stopstream
