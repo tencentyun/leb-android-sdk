@@ -141,6 +141,7 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
                 String stats =
                         "***** video stats *****\n" +
                         "PlayTime: " + LEBWebRTCStatsReport.mPlayTime +
+                        " s" +
                         "\n" +
                         "Receive/Decode/Drop: " +
                         LEBWebRTCStatsReport.mFramesReceived +
@@ -166,6 +167,7 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
                         "\n" +
                         "1stVideoPacketDelay: " +
                         LEBWebRTCStatsReport.mFirstVideoPacketDelay +
+                        " ms" +
                         "\n" +
                         "1stRenderedDelay: " +
                         LEBWebRTCStatsReport.mFirstFrameRenderDelay +
@@ -184,6 +186,7 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
                         "\n" +
                         "1stAudioPacketDelay: " +
                          LEBWebRTCStatsReport.mFirstVideoPacketDelay +
+                         " ms" +
                          "\n";
                 mStatsView.setText(stats);
             });
