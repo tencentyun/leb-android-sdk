@@ -33,8 +33,8 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
     private TextView         mStatsView;
     private FrameLayout      mVideoViewLayout;
     private boolean          mShowStats = true;
-    private String           mRequestPullUrl = "https://live.rtc.qq.com:8687/webrtc/v1/pullstream";//请求拉流
-    private String           mRequestStopUrl = "https://live.rtc.qq.com:8687/webrtc/v1/stopstream";//停止拉流
+    private String           mRequestPullUrl = "https://webrtc.liveplay.myqcloud.com/webrtc/v1/pullstream";//请求拉流
+    private String           mRequestStopUrl = "https://webrtc.liveplay.myqcloud.com//webrtc/v1/stopstream";//停止拉流
     private String           mSvrSig;//服务器签名，后面每个请求必须携带这个字段内容, 业务无需理解字段内容
 
     private int  mVideoViewLayoutWidth = 0;

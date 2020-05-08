@@ -2,15 +2,15 @@
 
 ```	
 【必选接口】
-https://live.rtc.qq.com:8687/webrtc/v1/pullstream           //请求拉流
-https://live.rtc.qq.com:8687/webrtc/v1/stopstream           //停止拉流
+https://webrtc.liveplay.myqcloud.com/webrtc/v1/pullstream           //请求拉流
+https://webrtc.liveplay.myqcloud.com/webrtc/v1/stopstream           //停止拉流
 ```
 	
 ```
 【可选接口】
-https://live.rtc.qq.com:8687/webrtc/v1/reportquality        //质量上报，2s上报一次，可选接口
-https://live.rtc.qq.com:8687/webrtc/v1/reporticestate       //ice状态上报，状态变化时上报
-https://live.rtc.qq.com:8687/webrtc/v1/firstframeusetime    //首帧耗时上报
+https://webrtc.liveplay.myqcloud.com/webrtc/v1/reportquality        //质量上报，2s上报一次，可选接口
+https://webrtc.liveplay.myqcloud.com/webrtc/v1/reporticestate       //ice状态上报，状态变化时上报
+https://webrtc.liveplay.myqcloud.com/webrtc/v1/firstframeusetime    //首帧耗时上报
 ```
 
 ### 所有的接口都是post请求，请求参数是json格式，所有参数字段都是必填的，各个接口具体参数如下。
