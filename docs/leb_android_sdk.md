@@ -26,6 +26,8 @@
     dependencies {
         implementation files('lebwebrtcsdk-release.aar')
     }
+    注：1. lebwebrtcsdk-release.aar 由https://github.com/tencentyun/leb-android-sdk编译生成。
+        2. leb-android-sdk依赖于原生webrtc或删减版WebRTC（https://github.com/tencentyun/webrtc-client-native）
 
 ### 2.3 SO库的ABI说明
     SDK内包含SO库，⽬目前仅⽀支持 armeabi-v7a 、 arm64-v8a 两种ABI架构。
