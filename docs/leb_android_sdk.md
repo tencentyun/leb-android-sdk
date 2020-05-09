@@ -18,6 +18,11 @@
     dependencies {
         implementation 'com.tencent.xbright:lebwebrtcsdk:1.0.0'
     }
+    注:  
+    * lebwebrtcsdk:1.0.0 依赖于twebrtcsdk:1.0.0(由[TWebRTC-Android-SDK](https://github.com/tencentyun/TWebRTC-Android-SDK.git)编译和发布)
+    dependencies {
+        api 'com.tencent.xbright:twebrtcsdk:1.0.0'
+    }
 
 ### 2.2 AAR接⼊入⽅方式
 
@@ -26,11 +31,12 @@
     dependencies {
         implementation files('lebwebrtcsdk-release.aar')
     }
-    注：1. lebwebrtcsdk-release.aar 由https://github.com/tencentyun/leb-android-sdk编译生成。
-        2. leb-android-sdk依赖于原生webrtc或删减版WebRTC（https://github.com/tencentyun/webrtc-client-native）
+    注: 
+    * lebwebrtcsdk-release.aar 由[leb-android-sdk](https://github.com/tencentyun/leb-android-sdk.git)编译生成。 
+    * leb-android-sdk依赖于原生webrtc或[删减版WebRTC](https://github.com/tencentyun/TWebRTC.git)  
 
 ### 2.3 SO库的ABI说明
-    SDK内包含SO库，⽬目前仅⽀支持 armeabi-v7a 、 arm64-v8a 两种ABI架构。
+    SDK内包含SO库，⽬目前仅⽀支持 armeabi-v7a、 arm64-v8a 两种ABI架构。
 
 ### 2.4 权限
     需要配置⼀一些必要的权限才能正常运⾏行行，请确认app的 AndroidManifest.xml 中添加了了如下权限:
@@ -178,9 +184,9 @@ LEBWebRTCParameters构造见下面示例：
 ## 4. http信令
     http信令包括，拉流和停流，由用户在app侧实现，具体定义请见《signal_http_protoc》
     //请求拉流
-    https://live.rtc.qq.com:8687/webrtc/v1/pullstream
+    https://webrtc.liveplay.myqcloud.com/webrtc/v1/pullstream
     //停止拉流
-    https://live.rtc.qq.com:8687/webrtc/v1/stopstream           
+    https://webrtc.liveplay.myqcloud.com/webrtc/v1/stopstream
 
 
 ### 4.1 拉流
