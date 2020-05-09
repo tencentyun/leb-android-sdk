@@ -8,7 +8,7 @@ buildscript {
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'com.kezong.fat-aar'
+//apply plugin: 'com.kezong.fat-aar'
 apply plugin: 'com.novoda.bintray-release'
 
 
@@ -62,7 +62,8 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:28.0.0'
 
-    embed (name:'libwebrtc-release', ext:'aar', configuration:'default')
+    //embed (name:'libwebrtc-release', ext:'aar', configuration:'default')
+    api files('src/libs/libwebrtc.jar')
 }
 
 publish {
