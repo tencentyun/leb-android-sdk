@@ -30,7 +30,7 @@ public class LEBWebRTCStatsCollector {
         long frameHeight;
         long framesReceived;
         long framesDecoded;
-        long mFramesDropped;
+        long framesDropped;
         long rtt;
         long freezeCount;
         double totalFreezesDuration;
@@ -95,8 +95,8 @@ public class LEBWebRTCStatsCollector {
                 if (rtcStatsMemberMap.get("framesDecoded") != null) {
                     newStatsRecord.framesDecoded = (long) rtcStatsMemberMap.get("framesDecoded");
                 }
-                if (rtcStatsMemberMap.get("mFramesDropped") != null) {
-                    newStatsRecord.mFramesDropped = (long) rtcStatsMemberMap.get("mFramesDropped");
+                if (rtcStatsMemberMap.get("framesDropped") != null) {
+                    newStatsRecord.framesDropped = (long) rtcStatsMemberMap.get("framesDropped");
                 }
                 if (rtcStatsMemberMap.get("decodeTimeMs") != null) {
                     newStatsRecord.decodeTimeMs = (long) rtcStatsMemberMap.get("decodeTimeMs");
@@ -131,7 +131,7 @@ public class LEBWebRTCStatsCollector {
         } else {
             mLEBWebRTCStatsReport.mFramesReceived = newStatsRecord.framesReceived;
             mLEBWebRTCStatsReport.mFramesDecoded = newStatsRecord.framesDecoded;
-            mLEBWebRTCStatsReport.mFramesDropped = newStatsRecord.mFramesDropped;
+            mLEBWebRTCStatsReport.mFramesDropped = newStatsRecord.framesDropped;
             mLEBWebRTCStatsReport.mPacketsLost = newStatsRecord.packetsLost;
             mLEBWebRTCStatsReport.mAudioPacketsLost = newStatsRecord.audioPacketsLost;
             mLEBWebRTCStatsReport.mAudioPacketsReceived = newStatsRecord.audioPacketsReceived;

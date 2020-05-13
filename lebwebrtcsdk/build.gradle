@@ -70,7 +70,7 @@ publish {
     userOrg = 'tencentyun'
     groupId = 'com.tencent.xbright'
     artifactId = 'lebwebrtcsdk'
-    publishVersion = '1.0.0'
+    publishVersion = '1.0.1'
     desc = 'leb android sdk'
     website = 'https://github.com/tencentyun/leb-android-sdk'
 }

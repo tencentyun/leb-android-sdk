@@ -36,7 +36,7 @@
     * leb-android-sdk依赖于原生webrtc或[删减版WebRTC](https://github.com/tencentyun/TWebRTC.git)  
 
 ### 2.3 SO库的ABI说明
-    SDK内包含SO库，⽬目前仅⽀支持 armeabi-v7a、 arm64-v8a 两种ABI架构。
+    SDK内包含SO库，⽬前仅⽀支持 armeabi-v7a、 arm64-v8a 两种ABI架构。
 
 ### 2.4 权限
     需要配置⼀一些必要的权限才能正常运⾏行行，请确认app的 AndroidManifest.xml 中添加了了如下权限:
