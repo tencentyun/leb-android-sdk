@@ -50,6 +50,7 @@ public class PeerConnectionClient implements PeerConnection.Observer, RtpReceive
     public interface PeerConnectionEvent {
         void onCreateOfferSuccess(String sdp);
         void onIceCandidate(String candidate, String sdpMid, int sdpMLineIndex);
+        void onIceConnectionChange(PeerConnection.IceConnectionState iceConnectionState);
         void onConnectionChange(PeerConnection.PeerConnectionState newState);
         void onFirstPacketReceived(MediaStreamTrack.MediaType media_type);
     }
@@ -154,15 +155,17 @@ public class PeerConnectionClient implements PeerConnection.Observer, RtpReceive
     @Override
     public void onIceConnectionChange(PeerConnection.IceConnectionState iceConnectionState) {
         Logging.d(TAG, "onIceConnectionChange " + iceConnectionState);
-        if (iceConnectionState == PeerConnection.IceConnectionState.COMPLETED) {
-            LEBWebRTCClient.mConnectState = LEBWebRTCEvents.ConnectionState.STATE_ICE_COMPLETED;
+        if (mPcEvent != null) {
+            mPcEvent.onIceConnectionChange(iceConnectionState);
         }
     }
 
     @Override
     public void onConnectionChange(PeerConnection.PeerConnectionState newState) {
         Logging.d(TAG, "PeerConnectionState: " + newState);
-        mPcEvent.onConnectionChange(newState);
+        if (mPcEvent != null) {
+            mPcEvent.onConnectionChange(newState);
+        }
     }
 
     @Override

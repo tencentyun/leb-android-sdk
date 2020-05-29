@@ -81,10 +81,10 @@ public class LEBWebRTCView extends SurfaceViewRenderer {
             mPeriodExecutorService.schedule(new Runnable() {
                 @Override
                 public void run() {
-                    if ((LEBWebRTCClient.mConnectState == LEBWebRTCEvents.ConnectionState.STATE_WEBRTC_CONNECTED) &&
+                    if ((mLEBWebRTCClient.mConnectState == LEBWebRTCEvents.ConnectionState.STATE_WEBRTC_CONNECTED) &&
                             !mFirstFrameRendered) {
-                        LEBWebRTCClient.mConnectState = LEBWebRTCEvents.ConnectionState.STATE_WEBRTC_CONNECTED;
-                        mLEBWebrtcEventObserver.onEventConnectFailed(LEBWebRTCClient.mConnectState);
+                        mLEBWebRTCClient.mConnectState = LEBWebRTCEvents.ConnectionState.STATE_WEBRTC_CONNECTED;
+                        mLEBWebrtcEventObserver.onEventConnectFailed(mLEBWebRTCClient.mConnectState);
                     }
                 }
             }, mLEBWebRTCParameters.getConnectionTimeOutInMs() + 5000, TimeUnit.MILLISECONDS);
@@ -138,7 +138,7 @@ public class LEBWebRTCView extends SurfaceViewRenderer {
             @Override
             public void onFirstFrameRendered() {
                 Log.d(TAG, "onFirstFrameRendered");
-                LEBWebRTCClient.mConnectState = LEBWebRTCEvents.ConnectionState.STATE_FIRST_FRAME_RENDERED;
+                mLEBWebRTCClient.mConnectState = LEBWebRTCEvents.ConnectionState.STATE_FIRST_FRAME_RENDERED;
                 mFirstFrameRendered = true;
                 mLEBWebrtcEventObserver.onEventFirstFrameRendered();
                 mFirstFrameRenderDelay = System.currentTimeMillis() - mStartTimestampInMs;

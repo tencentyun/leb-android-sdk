@@ -37,7 +37,7 @@ public class LEBWebRTCClient implements PeerConnectionClient.PeerConnectionEvent
     private boolean mPCConnected = false;
     private long mStartTimestampInMs = 0;
 
-    public static LEBWebRTCEvents.ConnectionState mConnectState = LEBWebRTCEvents.ConnectionState.STATE_BEGIN;
+    public LEBWebRTCEvents.ConnectionState mConnectState = LEBWebRTCEvents.ConnectionState.STATE_BEGIN;
 
 
     public LEBWebRTCClient(LEBWebRTCParameters rtcParams, SurfaceViewRenderer surfaceView, EglBase eglBase, LEBWebRTCEvents events) {
@@ -176,7 +176,6 @@ public class LEBWebRTCClient implements PeerConnectionClient.PeerConnectionEvent
         }
     }
 
-
     @Override
     public void onCreateOfferSuccess(final String sdp) {
         mConnectState = LEBWebRTCEvents.ConnectionState.STATE_OFFER_CREATED;
@@ -186,6 +185,13 @@ public class LEBWebRTCClient implements PeerConnectionClient.PeerConnectionEvent
     @Override
     public void onIceCandidate(String candidate, String sdpMid, int sdpMLineIndex) {
         Log.d(TAG, "onIceCandidate");
+    }
+
+    @Override
+    public void onIceConnectionChange(PeerConnection.IceConnectionState iceConnectionState) {
+        if (iceConnectionState == PeerConnection.IceConnectionState.COMPLETED) {
+            mConnectState = LEBWebRTCEvents.ConnectionState.STATE_ICE_COMPLETED;
+        }
     }
 
     @Override
