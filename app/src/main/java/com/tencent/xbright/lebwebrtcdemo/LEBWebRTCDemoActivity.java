@@ -23,6 +23,11 @@ import org.json.JSONObject;
  * LEB WebRTC Demo Activity
  * weifei@tencent.com
  * 2020.4.8
+ *
+ * 注意：本demo只演示了快直播的拉流和停流的流程，没有实现业务和app本身的逻辑，比如：
+ *      1. Surface相关，前后台切换、全屏缩放、屏幕旋转等逻辑。
+ *      2. Audio相关，音频设备检测、请求和释放音频焦点等。
+ *      3. 播放相关，完善pause、resume、stop等相关逻辑。
  */
 
 public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRTCEvents {
