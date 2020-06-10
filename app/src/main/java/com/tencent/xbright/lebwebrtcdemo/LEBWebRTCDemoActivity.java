@@ -189,6 +189,7 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
                          " ms" +
                          "\n";
                 mStatsView.setText(stats);
+                //Log.d(TAG, "perf stats: " + stats);
             });
         }
     }

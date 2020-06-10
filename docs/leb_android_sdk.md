@@ -5,6 +5,11 @@
     快直播（Live Event Broadingcasting）腾讯基于WebRTC技术的超低延时直播，通过LEBWebRTC Android SDK，接入商只需对接几个接口，快速实现Android平台实现接入和播放。
 
 ## 2. SDK集成接入
+     注意：本demo只演示了快直播的拉流和停流的流程，没有实现其他业务和app本身的逻辑，比如：
+     1. Surface相关，前后台切换、全屏缩放、屏幕旋转等逻辑。
+     2. Audio相关，音频设备检测、请求和释放音频焦点等。
+     3. 播放相关，完善pause、resume、stop等相关逻辑。
+
 
 ### 2.1 jcenter接入方式
     SDK提供两种⽅方式接⼊入: jcenter 和 AAR ，可以根据需要选择接⼊入⽅方式，分别如下：
