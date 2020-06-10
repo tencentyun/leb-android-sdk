@@ -10,10 +10,12 @@ import org.webrtc.EglBase;
 import org.webrtc.Logging;
 import org.webrtc.RendererCommon;
 import org.webrtc.SurfaceViewRenderer;
+import org.webrtc.audio.AudioDeviceModule;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 
 /**
  * LEB WebRTC View
@@ -129,6 +131,14 @@ public class LEBWebRTCView extends SurfaceViewRenderer {
             }
             super.release();
         }
+    }
+
+    /**
+     * 设置静音播放
+     */
+    public void mutePlay(boolean isMute) {
+        Log.d(TAG, "mutePlay: " + isMute);
+        mLEBWebRTCClient.mute(isMute);
     }
 
 

@@ -184,8 +184,11 @@ LEBWebRTCParameters构造见下面示例：
 ### 3.4 释放资源
     //释放SDK相关资源
     void release() 
-    
-    
+   
+### 3.5 静音播放
+    //设置静音播放
+    void mutePlay(boolen isMute) 
+
 ## 4. http信令
     http信令包括，拉流和停流，由用户在app侧实现，具体定义请见《signal_http_protoc》
     //请求拉流

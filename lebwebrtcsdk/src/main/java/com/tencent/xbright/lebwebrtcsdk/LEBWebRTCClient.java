@@ -147,6 +147,14 @@ public class LEBWebRTCClient implements PeerConnectionClient.PeerConnectionEvent
         mStatsCollector=null;
     }
 
+    /**
+     * 静音播放
+     * @return
+     */
+    public void mute(boolean isMute) {
+        mPCClient.setMute(isMute);
+    }
+
     public LEBWebRTCStatsReport getStatsReport() {
         return (mStatsCollector != null)? mStatsCollector.mLEBWebRTCStatsReport : null;
     }
