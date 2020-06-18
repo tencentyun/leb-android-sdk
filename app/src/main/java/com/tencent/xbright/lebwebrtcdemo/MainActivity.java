@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         String url = inputUrl.getText().toString();
         if (!url.startsWith("webrtc://")) {
-            url = "webrtc://6721.liveplay.myqcloud.com/live/6721_d71956d9cc93e4a467b11e06fdaf039a";
+            url = "webrtc://5664.liveplay.myqcloud.com/live/5664_harchar1";
         }
         LEBWebRTCDemoActivity.start(MainActivity.this, url);
     }
