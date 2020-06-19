@@ -14,6 +14,7 @@ import org.webrtc.MediaStream;
 import org.webrtc.MediaStreamTrack;
 import org.webrtc.PeerConnection;
 import org.webrtc.PeerConnectionFactory;
+import org.webrtc.PlatformSoftwareVideoDecoderFactory;
 import org.webrtc.RTCStatsCollectorCallback;
 import org.webrtc.RtpReceiver;
 import org.webrtc.RtpTransceiver;
@@ -132,6 +133,8 @@ public class PeerConnectionClient implements PeerConnection.Observer, RtpReceive
         VideoDecoderFactory decoderFactory = null;
         if (mLEBWebRTCParameters.isEnableHwDecode()) {
             decoderFactory = new DefaultVideoDecoderFactory(mEglBase.getEglBaseContext());
+        } else {
+            decoderFactory = new PlatformSoftwareVideoDecoderFactory(mEglBase.getEglBaseContext());
         }
         PeerConnectionFactory.initialize(PeerConnectionFactory.InitializationOptions.builder(applicationContext)
                 .setFieldTrials(new String("WebRTC-FlexFEC-03/Enabled/WebRTC-FlexFEC-03-Advertised/Enabled/"))
