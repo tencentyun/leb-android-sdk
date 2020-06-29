@@ -92,6 +92,8 @@ public class PeerConnectionClient implements PeerConnection.Observer, RtpReceive
             PeerConnection.RTCConfiguration rtcConfig = new PeerConnection.RTCConfiguration(new ArrayList<>());
 
             rtcConfig.sdpSemantics = PeerConnection.SdpSemantics.UNIFIED_PLAN;
+            rtcConfig.audioJitterBufferMaxPackets = 20;
+            rtcConfig.audioJitterBufferFastAccelerate = true;
             mPC = mPCFactory.createPeerConnection(rtcConfig, this);
         }
 
