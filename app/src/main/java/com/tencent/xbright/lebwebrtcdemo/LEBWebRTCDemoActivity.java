@@ -140,59 +140,30 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
     }
 
     @Override
-    public void onEventStatsReport(LEBWebRTCStatsReport LEBWebRTCStatsReport) {
+    public void onEventStatsReport(LEBWebRTCStatsReport statsReport) {
         if (mShowStats) {
             runOnUiThread(() -> {
                 String stats =
                         "***** video stats *****\n" +
-                        "PlayTime: " + LEBWebRTCStatsReport.mPlayTime +
-                        " s" +
-                        "\n" +
-                        "Receive/Decode/Drop: " +
-                        LEBWebRTCStatsReport.mFramesReceived +
-                        "/" +
-                        LEBWebRTCStatsReport.mFramesDecoded +
-                        "/" +
-                        LEBWebRTCStatsReport.mFramesDropped +
-                        "\n" +
-                        "DecodeFrameRate: " + String.format("%.2f", LEBWebRTCStatsReport.mFramerate) +
-                        " fps" +
-                        "\n" +
-                        "BitRate: " +
-                        (LEBWebRTCStatsReport.mVideoBitrate) +
-                        " kbps" +
-                        "\n" +
-                        "PacketsLost: " +
-                        LEBWebRTCStatsReport.mPacketsLost +
-                        "\n" +
-                        "FrameResolution: " +
-                        LEBWebRTCStatsReport.mFrameWidth +
-                        " x " +
-                        LEBWebRTCStatsReport.mFrameHeight +
-                        "\n" +
-                        "1stVideoPacketDelay: " +
-                        LEBWebRTCStatsReport.mFirstVideoPacketDelay +
-                        " ms" +
-                        "\n" +
-                        "1stRenderedDelay: " +
-                        LEBWebRTCStatsReport.mFirstFrameRenderDelay +
-                        " ms" +
-                        "\n" +
+                        "PlayTime: " + (statsReport.mPlayTimeMs/1000 + 1) + " s" + "\n" +
+                        "Receive/Decode/Drop: " + statsReport.mFramesReceived + "/" + statsReport.mFramesDecoded + "/" + statsReport.mFramesDropped + "\n" +
+                        "DecodeFrameRate: " + String.format("%.2f", statsReport.mFramerate) + " fps" + "\n" +
+                        "BitRate: " + (statsReport.mVideoBitrate) + " kbps" + "\n" +
+                        "PacketsLost: " + statsReport.mVideoPacketsLost + "\n" +
+                        "FrameResolution: " + statsReport.mFrameWidth + " x " + statsReport.mFrameHeight + "\n" +
+                        "1stVideoPacketDelay: " + statsReport.mFirstVideoPacketDelayMs + " ms" + "\n" +
+                        "1stRenderedDelayMs: " + statsReport.mFirstFrameRenderDelayMs + " ms" + "\n" +
+                        "DelayMs: " + statsReport.mVideoDelayMs + " ms" + "\n" +
+                        "JitterBufferDelayMs: " + statsReport.mVdieoJitterBufferDelayMs + " ms" + "\n" +
+                        "NacksSent: " + statsReport.mVideoNacksSent + "\n" +
+                        "RTT: " + statsReport.mRTT + " ms" + "\n" +
                         "\n***** audio stats *****\n" +
-                        "PacketsLost: " +
-                        LEBWebRTCStatsReport.mAudioPacketsLost +
-                        "\n" +
-                        "PacketsReceived: " +
-                        LEBWebRTCStatsReport.mAudioPacketsReceived +
-                        "\n" +
-                        "Bitrate: " +
-                        LEBWebRTCStatsReport.mAudioBitrate +
-                        " kbps" +
-                        "\n" +
-                        "1stAudioPacketDelay: " +
-                         LEBWebRTCStatsReport.mFirstVideoPacketDelay +
-                         " ms" +
-                         "\n";
+                        "PacketsLost: " + statsReport.mAudioPacketsLost + "\n" +
+                        "PacketsReceived: " + statsReport.mAudioPacketsReceived + "\n" +
+                        "Bitrate: " + statsReport.mAudioBitrate + " kbps" + "\n" +
+                        "1stAudioPacketDelayMs: " + statsReport.mFirstVideoPacketDelayMs + " ms" + "\n" +
+                        "DelayMs: " + statsReport.mAudioDelayMs + " ms" + "\n" +
+                        "JitterBufferDelayMs: " + statsReport.mAudioJitterBufferDelayMs + " ms" + "\n";
                 mStatsView.setText(stats);
                 //Log.d(TAG, "perf stats: " + stats);
             });
