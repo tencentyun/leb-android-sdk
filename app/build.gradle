@@ -55,6 +55,6 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    implementation 'com.tencent.xbright:lebwebrtcsdk:1.0.6'
+    implementation 'com.tencent.xbright:lebwebrtcsdk:1.0.7'
 }
 

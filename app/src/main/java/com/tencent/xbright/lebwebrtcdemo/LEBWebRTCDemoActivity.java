@@ -161,7 +161,7 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
                         "PacketsLost: " + statsReport.mAudioPacketsLost + "\n" +
                         "PacketsReceived: " + statsReport.mAudioPacketsReceived + "\n" +
                         "Bitrate: " + statsReport.mAudioBitrate + " kbps" + "\n" +
-                        "1stAudioPacketDelayMs: " + statsReport.mFirstVideoPacketDelayMs + " ms" + "\n" +
+                        "1stAudioPacketDelayMs: " + statsReport.mFirstAudioPacketDelayMs + " ms" + "\n" +
                         "DelayMs: " + statsReport.mAudioDelayMs + " ms" + "\n" +
                         "JitterBufferDelayMs: " + statsReport.mAudioJitterBufferDelayMs + " ms" + "\n";
                 mStatsView.setText(stats);
