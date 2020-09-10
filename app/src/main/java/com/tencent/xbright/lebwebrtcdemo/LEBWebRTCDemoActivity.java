@@ -94,6 +94,9 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
     protected void onStop() {
         Log.v(TAG, "onStop");
         super.onStop();
+        mWebRTCView.stopPlay();
+        mWebRTCView.release();
+        // 可以不调signalStop(), 后台在连接断开后会保底停止下发数据和计费
         signalingStop();
     }
 
@@ -245,8 +248,6 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
                             Log.d(TAG, "response from signling server: " + response);
                             if (errcode == 0) {
                                 Log.d(TAG,"request to stop success");
-                                mWebRTCView.stopPlay();
-                                mWebRTCView.release();
                             }
                         } catch (JSONException e) {
                             Log.d(TAG, "response JSON parsing error: " + e.toString());
