@@ -24,6 +24,7 @@
                  android:allowBackup="false"
                  android:debuggable="true"
                  android:supportsRtl="false"
+                 android:usesCleartextTraffic="true"
                  tools:ignore="HardcodedDebugMode">
 
         <activity

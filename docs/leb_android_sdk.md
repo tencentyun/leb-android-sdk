@@ -10,7 +10,6 @@
      2. Audio相关，音频设备检测、请求和释放音频焦点等。
      3. 播放相关，完善pause、resume、stop等相关逻辑。
 
-
 ### 2.1 jcenter接入方式
     SDK提供两种⽅方式接⼊入: jcenter 和 AAR ，可以根据需要选择接⼊入⽅方式，分别如下：
     首先，在app的最上层 build.gradle 中加⼊入 jcenter的仓库依赖
@@ -21,24 +20,8 @@
     }
     然后，在相关module的build.gradle中加⼊入依赖
     dependencies {
-        implementation 'com.tencent.xbright:lebwebrtcsdk:1.0.0'
+        implementation 'com.tencent.xbright:lebwebrtcsdk:1.0.7'
     }
-    注:  
-    * lebwebrtcsdk:1.0.0 依赖于twebrtcsdk:1.0.0(由[TWebRTC-Android-SDK](https://github.com/tencentyun/TWebRTC-Android-SDK.git)编译和发布)
-    dependencies {
-        api 'com.tencent.xbright:twebrtcsdk:1.0.0'
-    }
-
-### 2.2 AAR接⼊入⽅方式
-
-    获取SDK的压缩包之后，把 lebwebrtcsdk-release.aar ⽂文件拷⻉贝到app⼯工程的libs⽬目录下⾯面，然后在相关
-    module的 build.gradle 中添加对aar⽂文件的依赖
-    dependencies {
-        implementation files('lebwebrtcsdk-release.aar')
-    }
-    注: 
-    * lebwebrtcsdk-release.aar 由[leb-android-sdk](https://github.com/tencentyun/leb-android-sdk.git)编译生成。 
-    * leb-android-sdk依赖于原生webrtc或[删减版WebRTC](https://github.com/tencentyun/TWebRTC.git)  
 
 ### 2.3 SO库的ABI说明
     SDK内包含SO库，⽬前仅⽀支持 armeabi-v7a、 arm64-v8a 两种ABI架构。
@@ -240,6 +223,23 @@ LEBWebRTCParameters构造见下面示例：
 
 
 
+## 5. bugly接入
+建议app接入bugly来监控运行质量，具体见bugly官方文档https://bugly.qq.com/docs/user-guide/instruction-manual-android/?v=20200622202242
+
+### 5.1 build.gradle添加
+
+    dependencies {
+        compile 'com.tencent.bugly:crashreport:latest.release' //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
+        compile 'com.tencent.bugly:nativecrashreport:latest.release' //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
+    }
+
+### 5.2 bugly初始化示例
+
+    CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(getApplicationContext());
+    strategy.setAppChannel("myChannel");  //设置渠道
+    strategy.setAppVersion("1.0.7");      //App的版本, 这里设置了SDK version
+    strategy.setAppPackageName("com.tencent.xbright.lebwebrtcdemo");  //App的包名
+    CrashReport.initCrashReport(getApplicationContext(), "e3243444c9", false, strategy);
 
 
 
