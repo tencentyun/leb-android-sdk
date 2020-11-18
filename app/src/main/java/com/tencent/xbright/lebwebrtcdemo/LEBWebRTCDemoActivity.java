@@ -19,6 +19,8 @@ import com.tencent.xbright.lebwebrtcsdk.LEBWebRTCParameters;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.nio.ByteBuffer;
+
 /**
  * LEB WebRTC Demo Activity
  * weifei@tencent.com
@@ -39,16 +41,25 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
     private FrameLayout      mVideoViewLayout;
     private boolean          mShowStats = true;
     private String           mRequestPullUrl = "https://webrtc.liveplay.myqcloud.com/webrtc/v1/pullstream";//请求拉流
-    private String           mRequestStopUrl = "https://webrtc.liveplay.myqcloud.com//webrtc/v1/stopstream";//停止拉流
+    private String           mRequestStopUrl = "https://webrtc.liveplay.myqcloud.com/webrtc/v1/stopstream";//停止拉流
     private String           mSvrSig;//服务器签名，后面每个请求必须携带这个字段内容, 业务无需理解字段内容
 
-    private int  mVideoViewLayoutWidth = 0;
-    private int  mVideoViewLayoutHeight = 0;
-    private int  cachedHeight;
+    private int              mSignalVersion = 0;
+    private boolean          mDisableEncryption = false;
+    private int              mAudioFormat = LEBWebRTCParameters.OPUS; //LEBWebRTCParameters.AAC_LATM, LEBWebRTCParameters.AAC_ADTS
+    private boolean          mEnableHwDecode = true;
+    private boolean          mEnableSEICallback = false;
 
-    public static void start(Context context, String url) {
+    public static void start(Context context, int signalversion, String streamurl, String pullurl, boolean enableHwDecode,
+                             int audioFormat, boolean disableEncryption, boolean enableSEICallback) {
         Intent intent = new Intent(context, LEBWebRTCDemoActivity.class);
-        intent.putExtra("url", url);
+        intent.putExtra("signalversion", signalversion);
+        intent.putExtra("streamurl", streamurl);
+        intent.putExtra("pullurl", pullurl);
+        intent.putExtra("enableHwDecode", enableHwDecode);
+        intent.putExtra("audioFormat", audioFormat);
+        intent.putExtra("disableEncryption", disableEncryption);
+        intent.putExtra("enableSEICallback", enableSEICallback);
         context.startActivity(intent);
     }
 
@@ -62,15 +73,27 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
         mVideoViewLayout = findViewById(R.id.id_video_layout);
         mStatsView    = findViewById(R.id.id_stats);
 
-        mWebRTCUrl = getIntent().getStringExtra("url");
+        mSignalVersion = getIntent().getIntExtra("signalversion", 0);
+        mWebRTCUrl = getIntent().getStringExtra("streamurl");
+        mRequestPullUrl = getIntent().getStringExtra("pullurl");
+        mAudioFormat = getIntent().getIntExtra("audioFormat", 0);
+        mDisableEncryption = getIntent().getBooleanExtra("disableEncryption", false);
+        mEnableHwDecode = getIntent().getBooleanExtra("enableHwDecode", true);
+        mEnableSEICallback = getIntent().getBooleanExtra("enableSEICallback", false);
 
-        Log.d(TAG, "set stream url: " + mWebRTCUrl);
+        Log.d(TAG, "set signal version: " + mSignalVersion + " stream url: " + mWebRTCUrl +
+                " pull url: " + mRequestPullUrl + " hwDecode: " + mEnableHwDecode +
+                " audioFormat: " + mAudioFormat + " disableEncryp: " + mDisableEncryption +
+                " enableSEICallback: " + mEnableSEICallback);
         mLEBWebRTCParameters = new LEBWebRTCParameters();
         mLEBWebRTCParameters.setStreamUrl(mWebRTCUrl);
-        mLEBWebRTCParameters.setLoggingSeverity(LEBWebRTCParameters.LOG_NONE);
-        mLEBWebRTCParameters.enableHwDecode(true);
+        mLEBWebRTCParameters.setLoggingSeverity(LEBWebRTCParameters.LOG_VERBOSE);
+        mLEBWebRTCParameters.enableHwDecode(mEnableHwDecode);
+        mLEBWebRTCParameters.disableEncryption(mDisableEncryption);
+        mLEBWebRTCParameters.enableSEICallback(mEnableSEICallback);
         mLEBWebRTCParameters.setConnectionTimeOutInMs(5000);//5s
         mLEBWebRTCParameters.setStatsReportPeriodInMs(1000);
+        mLEBWebRTCParameters.setAudioFormat(mAudioFormat);
 
         mWebRTCView = findViewById(R.id.id_surface_view);
         mWebRTCView.initilize(mLEBWebRTCParameters, this);
@@ -108,23 +131,23 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
 
     @Override
     public void onEventOfferCreated(String sdp) {
-        Log.v(TAG, "LEBWebRTC offer created");
+        Log.v(TAG, "LEBWebRTC onEventOfferCreated");
         signalingStart(sdp);
     }
 
     @Override
     public void onEventConnected() {
-        Log.v(TAG, "LEBWebRTC Connected");
+        Log.v(TAG, "LEBWebRTC onEventConnected");
     }
 
     @Override
     public void onEventConnectFailed(ConnectionState state) {
-        Log.v(TAG, "LEBWebRTC Connect Failed, state: " + state);
+        Log.v(TAG, "LEBWebRTC onEventConnectFailed, state: " + state);
     }
 
     @Override
     public void onEventDisconnect() {
-        Log.v(TAG, "LEBWebRTC Disconnect");
+        Log.v(TAG, "LEBWebRTC onEventDisconnect");
     }
 
     @Override
@@ -134,7 +157,7 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
 
     @Override
     public void onEventFirstFrameRendered() {
-        Log.v(TAG, "LEBWebRTC onFirstFrameRendered");
+        Log.v(TAG, "LEBWebRTC onEventFirstFrameRendered");
     }
 
     @Override
@@ -143,10 +166,19 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
     }
 
     @Override
+    public void onEventSEIReceived(ByteBuffer data) {// 解码线程，不要阻塞，没有start code
+        byte[] sei = new byte[data.capacity()];
+        data.get(sei);
+        Log.v(TAG, "onEventSEIReceived: nal_type " + (sei[0]&0x1f) + " size " + sei.length);
+    }
+
+    @Override
     public void onEventStatsReport(LEBWebRTCStatsReport statsReport) {
         if (mShowStats) {
             runOnUiThread(() -> {
                 String stats =
+                        "disableEncryption: " + mLEBWebRTCParameters.isDisableEncryption() + "\n" +
+                        "AudioFormat: " + mLEBWebRTCParameters.getAudioFormat() + "\n" +
                         "***** video stats *****\n" +
                         "PlayTime: " + (statsReport.mPlayTimeMs/1000 + 1) + " s" + "\n" +
                         "Receive/Decode/Drop: " + statsReport.mFramesReceived + "/" + statsReport.mFramesDecoded + "/" + statsReport.mFramesDropped + "\n" +
@@ -160,13 +192,14 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
                         "JitterBufferDelayMs: " + statsReport.mVdieoJitterBufferDelayMs + " ms" + "\n" +
                         "NacksSent: " + statsReport.mVideoNacksSent + "\n" +
                         "RTT: " + statsReport.mRTT + " ms" + "\n" +
-                        "\n***** audio stats *****\n" +
+                        "***** audio stats *****\n" +
                         "PacketsLost: " + statsReport.mAudioPacketsLost + "\n" +
                         "PacketsReceived: " + statsReport.mAudioPacketsReceived + "\n" +
                         "Bitrate: " + statsReport.mAudioBitrate + " kbps" + "\n" +
                         "1stAudioPacketDelayMs: " + statsReport.mFirstAudioPacketDelayMs + " ms" + "\n" +
                         "DelayMs: " + statsReport.mAudioDelayMs + " ms" + "\n" +
-                        "JitterBufferDelayMs: " + statsReport.mAudioJitterBufferDelayMs + " ms" + "\n";
+                        "JitterBufferDelayMs: " + statsReport.mAudioJitterBufferDelayMs + " ms" + "\n" +
+                        "NacksSent: " + statsReport.mAudioNacksSent + "\n";
                 mStatsView.setText(stats);
                 //Log.d(TAG, "perf stats: " + stats);
             });

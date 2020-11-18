@@ -20,7 +20,7 @@
     }
     然后，在相关module的build.gradle中加⼊入依赖
     dependencies {
-        implementation 'com.tencent.xbright:lebwebrtcsdk:1.0.7'
+        implementation 'com.tencent.xbright:lebwebrtcsdk:2.0.1'
     }
 
 ### 2.3 SO库的ABI说明
@@ -65,6 +65,36 @@
     </FrameLayout>
 
 
+LEBWebRTCParameters定义如下：
+
+    public class LEBWebRTCParameters {
+
+    // 快直播播放地址
+    private String mStreamUrl;
+    // 是否使用硬件解码
+    private boolean mEnableHwDecode = true;
+    // 音频格式
+    public static final int OPUS = 0x01;
+    public static final int AAC_LATM = 0x02;
+    public static final int AAC_ADTS = 0x04;
+    private int mAudioFormat = OPUS;
+    // 是否关闭加密传输
+    private boolean mDisableEncryption = false;
+    // 是否启用SEI回调
+    private boolean mEnableSEICallback = false;
+    // 播放状态回调周期
+    private int mStatsReportPeriodInMs = 1000;
+    // WebRTC日志级别
+    public static final int LOG_VERBOSE = 0x00;
+    public static final int LOG_INFO    = 0x01;
+    public static final int LOG_WARNING = 0x02;
+    public static final int LOG_ERROR   = 0x03;
+    public static final int LOG_NONE    = 0x04;
+    private int mLoggingSeverity = LOG_NONE;
+    // WebRTC连接超时
+    private int mConnectoionTimeoutInMs = 5000;//ms
+    ...
+    }
 LEBWebRTCParameters构造见下面示例：
 
     //创建参数对象
@@ -72,14 +102,19 @@ LEBWebRTCParameters构造见下面示例：
     //设置播放码流链接, webrtc://xxxxx
     mLEBWebRTCParameters.setStreamUrl(mWebRTCUrl);
     //设置是否硬解，默认为硬解
-    mLEBWebRTCParameters.enableHwDecode(true);
+    mLEBWebRTCParameters.enableHwDecode(mEnableHwDecode);
     //设置连接超时时间，默认为5000ms
     mLEBWebRTCParameters.setConnectionTimeOutInMs(5000);
     //设置播放状态回调事件周期，默认为1000ms
     mLEBWebRTCParameters.setStatsReportPeriodInMs(1000);
     //设置日志级别，默认为LOG_NONE
     mLEBWebRTCParameters.setLoggingSeverity(LEBWebRTCParameters.LOG_NONE);
-
+    //设置是否关闭加密，默认为打开加密
+    mLEBWebRTCParameters.disableEncryption(mDisableEncryption);
+    //设置是否启用SEI回调，默认为关闭
+    mLEBWebRTCParameters.enableSEICallback(mEnableSEICallback);
+    //设置拉流音频格式，LEBWebRTCParameters.OPUS, LEBWebRTCParameters.AAC_LATM, LEBWebRTCParameters.AAC_ADTS
+    mLEBWebRTCParameters.setAudioFormat(mAudioFormat);
 
     LEBWebRTCEvents事件回调定义如下：
     public interface LEBWebRTCEvents {
@@ -113,6 +148,9 @@ LEBWebRTCParameters构造见下面示例：
         void onEventResolutionChanged(int width, int height);
         // 统计数据
         void onEventStatsReport(LEBWebRTCStatsReport webRTCStatsReport);
+        // sei回调，解码线程，不要阻塞，没有start code
+        // 启用需设置enableSEICallback(true)，默认不回调
+        void onEventSEIReceived(ByteBuffer data);
     }
     其中onEventStatsReport(LEBWebRTCStatsReport webRTCStatsReport)用来回调播放状态，包含音视频播放性能、播放帧率、码率和时长等数据，LEBWebRTCStatsReport定义如下:
 
@@ -128,12 +166,19 @@ LEBWebRTCParameters构造见下面示例：
         public int    mPacketsLost; //丢包个数
         public long   mFrameWidth; //视频宽度
         public long   mFrameHeight; //视频高度
+        public long   mVideoDelayMs;
+        public long   mVdieoJitterBufferDelayMs;
+        public long   mVideoNacksSent;
+        public long   mRTT;
 
         //audio stats
         public long   mFirstAudioPacketDelay;//从启动到收到第一包音频数据的延时
         public int    mAudioPacketsLost; //丢包个数
         public long   mAudioPacketsReceived; //接收包数
         public long   mAudioBitrate;//音频码率
+        public long   mAudioDelayMs;
+        public long   mAudioJitterBufferDelayMs;
+        public long   mAudioNacksSent;
 
         //play stats
         public double mAverageFrameRate;//平均帧率
@@ -237,12 +282,13 @@ LEBWebRTCParameters构造见下面示例：
 
     CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(getApplicationContext());
     strategy.setAppChannel("myChannel");  //设置渠道
-    strategy.setAppVersion("1.0.7");      //App的版本, 这里设置了SDK version
+    strategy.setAppVersion("2.0.1");      //App的版本, 这里设置了SDK version
     strategy.setAppPackageName("com.tencent.xbright.lebwebrtcdemo");  //App的包名
     CrashReport.initCrashReport(getApplicationContext(), "e3243444c9", false, strategy);
 
 
-
+## 6. 标准WebRTC扩展
+快直播SDK和后台扩展了标准WebRTC，支持AAC、H265、B帧和关闭加密，其中使用AAC、H265和B帧的拉流需要后台配置拉流域名
 
 
 

@@ -1,5 +1,13 @@
 ## leb android sdk release history
 
+### v2.0.1
+    扩展标准WebRTC，支持如下特性：
+    1. 支持AAC，包括LC、HE和HEv2
+    2. 支持H265，包括硬解和软解
+    3. 支持H264和H265的B帧解码
+    4. 支持关闭加密
+    5. 支持H264和H265的SEI数据回调
+
 ### v1.0.7
     1. support builtin h264 software decoder
 
