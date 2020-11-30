@@ -20,7 +20,7 @@
     }
     然后，在相关module的build.gradle中加⼊入依赖
     dependencies {
-        implementation 'com.tencent.xbright:lebwebrtcsdk:2.0.1'
+        implementation 'com.tencent.xbright:lebwebrtcsdk:2.0.2'
     }
 
 ### 2.3 SO库的ABI说明
@@ -93,6 +93,9 @@ LEBWebRTCParameters定义如下：
     private int mLoggingSeverity = LOG_NONE;
     // WebRTC连接超时
     private int mConnectoionTimeoutInMs = 5000;//ms
+
+    // 默认音频PCM增益，0~10.0，增益过大会使PCM过饱和
+    private double mDefaultVolume = 1.0f;
     ...
     }
 LEBWebRTCParameters构造见下面示例：
@@ -212,10 +215,30 @@ LEBWebRTCParameters构造见下面示例：
 ### 3.4 释放资源
     //释放SDK相关资源
     void release() 
-   
+
 ### 3.5 静音播放
     //设置静音播放
-    void mutePlay(boolen isMute) 
+    void mutePlay(boolen isMute)
+
+### 3.6 设置音频PCM增益，0~10.0，默认为1.0
+    注意：增益过大会使PCM过饱和
+    void setVolume(double volume)
+
+### 3.7 截取视频内容
+    // 通过SnapshotListener回调输出bitmap，scale会截图缩放比例
+    void takeSnapshot(@NonNull SnapshotListener listener, float scale)
+
+    SnapshotListener 定义如下：
+    public interface SnapshotListener {
+        void onSnapshot(Bitmap bitmap);
+    }
+
+### 3.8 设置显示旋转角度，90，180，270
+    void setVideoRotation(int degree)
+
+### 3.9 显示缩放模式, 等比例缩放和平铺缩放
+    // scaleType SCALE_KEEP_ASPECT_FIT, SCALE_IGNORE_ASPECT_FILL
+    void setScaleType(int scaleType)
 
 ## 4. http信令
     http信令包括，拉流和停流，由用户在app侧实现，具体定义请见《signal_http_protoc》

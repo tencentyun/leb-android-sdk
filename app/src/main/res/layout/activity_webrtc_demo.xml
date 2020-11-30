@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/id_video_layout"
     android:layout_width="match_parent"
@@ -9,19 +10,102 @@
 
     <com.tencent.xbright.lebwebrtcsdk.LEBWebRTCView
         android:id="@+id/id_surface_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        />
 
     <TextView
         android:id="@+id/id_stats"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
+        android:focusable="false"
         android:padding="5dp"
         android:textColor="@android:color/white"
-        android:textSize="12dp"
-        android:focusable="false"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="stats" />
 
-</FrameLayout>
+    <ImageView
+        android:id="@+id/id_snapshot"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/snapshot"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="@id/id_surface_view"
+        app:layout_constraintEnd_toEndOf="@id/id_surface_view"
+        app:layout_constraintStart_toStartOf="@id/id_surface_view"
+        app:layout_constraintTop_toTopOf="@id/id_surface_view"
+        />
+
+    <HorizontalScrollView
+        android:id="@+id/id_feature_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="center_horizontal"
+            >
+
+            <TextView
+                android:id="@+id/id_snapshot_button"
+                android:drawableTop="@android:drawable/ic_menu_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:gravity="center_horizontal"
+                android:textColor="@android:color/white"
+                android:text="@string/snapshot"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                />
+
+            <TextView
+                android:id="@+id/id_rotation_button"
+                android:drawableTop="@android:drawable/ic_menu_always_landscape_portrait"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:gravity="center_horizontal"
+                android:textColor="@android:color/white"
+                android:text="@string/rotation"
+                android:layout_marginLeft="10dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                />
+
+            <TextView
+                android:id="@+id/id_scale_type_button"
+                android:drawableTop="@android:drawable/ic_menu_crop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:gravity="center_horizontal"
+                android:textColor="@android:color/white"
+                android:text="@string/scale_fit"
+                android:layout_marginLeft="10dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                />
+        </LinearLayout>
+    </HorizontalScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -41,8 +41,8 @@
 
         <activity
             android:name=".LEBWebRTCDemoActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="keyboardHidden|screenSize" />
 
     </application>
 </manifest>

@@ -221,4 +221,8 @@
     <string name="pref_enable_rtceventlog_key">enable_rtceventlog_key</string>
     <string name="pref_enable_rtceventlog_title">Enable RtcEventLog.</string>
     <string name="pref_enable_rtceventlog_default">false</string>
+    <string name="snapshot">截屏</string>
+    <string name="rotation">旋转</string>
+    <string name="scale_fill">填充缩放</string>
+    <string name="scale_fit">等比例缩放</string>
 </resources>

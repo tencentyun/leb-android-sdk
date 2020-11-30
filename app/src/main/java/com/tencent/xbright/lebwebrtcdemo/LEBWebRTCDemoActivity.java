@@ -1,16 +1,23 @@
 package com.tencent.xbright.lebwebrtcdemo;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
+import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
-import com.tencent.xbright.lebwebrtcdemo.R;
+
 import com.tencent.xbright.lebwebrtcsdk.LEBWebRTCStatsReport;
 import com.tencent.xbright.lebwebrtcsdk.LEBWebRTCEvents;
 import com.tencent.xbright.lebwebrtcsdk.LEBWebRTCView;
@@ -20,6 +27,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.ByteBuffer;
+
+import static com.tencent.xbright.lebwebrtcsdk.LEBWebRTCView.SCALE_IGNORE_ASPECT_FILL;
+import static com.tencent.xbright.lebwebrtcsdk.LEBWebRTCView.SCALE_KEEP_ASPECT_FIT;
 
 /**
  * LEB WebRTC Demo Activity
@@ -38,7 +48,11 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
     private LEBWebRTCParameters mLEBWebRTCParameters;
     private LEBWebRTCView       mWebRTCView;
     private TextView         mStatsView;
-    private FrameLayout      mVideoViewLayout;
+    private ImageView        mSnapshotView;
+    private View             mFeatureControlContainerView;
+
+    private Animator         mAnimator;
+
     private boolean          mShowStats = true;
     private String           mRequestPullUrl = "https://webrtc.liveplay.myqcloud.com/webrtc/v1/pullstream";//请求拉流
     private String           mRequestStopUrl = "https://webrtc.liveplay.myqcloud.com/webrtc/v1/stopstream";//停止拉流
@@ -49,6 +63,8 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
     private int              mAudioFormat = LEBWebRTCParameters.OPUS; //LEBWebRTCParameters.AAC_LATM, LEBWebRTCParameters.AAC_ADTS
     private boolean          mEnableHwDecode = true;
     private boolean          mEnableSEICallback = false;
+    private int              mRotationDegree = 0;
+    private int              mScaleType = SCALE_KEEP_ASPECT_FIT;
 
     public static void start(Context context, int signalversion, String streamurl, String pullurl, boolean enableHwDecode,
                              int audioFormat, boolean disableEncryption, boolean enableSEICallback) {
@@ -70,8 +86,9 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webrtc_demo);
 
-        mVideoViewLayout = findViewById(R.id.id_video_layout);
         mStatsView    = findViewById(R.id.id_stats);
+        mSnapshotView = findViewById(R.id.id_snapshot);
+        setupFeatureControl();
 
         mSignalVersion = getIntent().getIntExtra("signalversion", 0);
         mWebRTCUrl = getIntent().getStringExtra("streamurl");
@@ -87,7 +104,7 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
                 " enableSEICallback: " + mEnableSEICallback);
         mLEBWebRTCParameters = new LEBWebRTCParameters();
         mLEBWebRTCParameters.setStreamUrl(mWebRTCUrl);
-        mLEBWebRTCParameters.setLoggingSeverity(LEBWebRTCParameters.LOG_VERBOSE);
+        mLEBWebRTCParameters.setLoggingSeverity(LEBWebRTCParameters.LOG_NONE);
         mLEBWebRTCParameters.enableHwDecode(mEnableHwDecode);
         mLEBWebRTCParameters.disableEncryption(mDisableEncryption);
         mLEBWebRTCParameters.enableSEICallback(mEnableSEICallback);
@@ -97,6 +114,7 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
 
         mWebRTCView = findViewById(R.id.id_surface_view);
         mWebRTCView.initilize(mLEBWebRTCParameters, this);
+        mWebRTCView.setScaleType(mScaleType);
     }
 
     @Override
@@ -179,27 +197,7 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
                 String stats =
                         "disableEncryption: " + mLEBWebRTCParameters.isDisableEncryption() + "\n" +
                         "AudioFormat: " + mLEBWebRTCParameters.getAudioFormat() + "\n" +
-                        "***** video stats *****\n" +
-                        "PlayTime: " + (statsReport.mPlayTimeMs/1000 + 1) + " s" + "\n" +
-                        "Receive/Decode/Drop: " + statsReport.mFramesReceived + "/" + statsReport.mFramesDecoded + "/" + statsReport.mFramesDropped + "\n" +
-                        "DecodeFrameRate: " + String.format("%.2f", statsReport.mFramerate) + " fps" + "\n" +
-                        "BitRate: " + (statsReport.mVideoBitrate) + " kbps" + "\n" +
-                        "PacketsLost: " + statsReport.mVideoPacketsLost + "\n" +
-                        "FrameResolution: " + statsReport.mFrameWidth + " x " + statsReport.mFrameHeight + "\n" +
-                        "1stVideoPacketDelay: " + statsReport.mFirstVideoPacketDelayMs + " ms" + "\n" +
-                        "1stRenderedDelayMs: " + statsReport.mFirstFrameRenderDelayMs + " ms" + "\n" +
-                        "DelayMs: " + statsReport.mVideoDelayMs + " ms" + "\n" +
-                        "JitterBufferDelayMs: " + statsReport.mVdieoJitterBufferDelayMs + " ms" + "\n" +
-                        "NacksSent: " + statsReport.mVideoNacksSent + "\n" +
-                        "RTT: " + statsReport.mRTT + " ms" + "\n" +
-                        "***** audio stats *****\n" +
-                        "PacketsLost: " + statsReport.mAudioPacketsLost + "\n" +
-                        "PacketsReceived: " + statsReport.mAudioPacketsReceived + "\n" +
-                        "Bitrate: " + statsReport.mAudioBitrate + " kbps" + "\n" +
-                        "1stAudioPacketDelayMs: " + statsReport.mFirstAudioPacketDelayMs + " ms" + "\n" +
-                        "DelayMs: " + statsReport.mAudioDelayMs + " ms" + "\n" +
-                        "JitterBufferDelayMs: " + statsReport.mAudioJitterBufferDelayMs + " ms" + "\n" +
-                        "NacksSent: " + statsReport.mAudioNacksSent + "\n";
+                        statsReport;
                 mStatsView.setText(stats);
                 //Log.d(TAG, "perf stats: " + stats);
             });
@@ -290,4 +288,77 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
         httpConnection.send();
     }
 
+    private void setupFeatureControl() {
+        mFeatureControlContainerView = findViewById(R.id.id_feature_container);
+        View snapShotBtn = mFeatureControlContainerView.findViewById(R.id.id_snapshot_button);
+        snapShotBtn.setOnClickListener(view -> {
+            takeSnapshot();
+        });
+
+        View rotationBtn = mFeatureControlContainerView.findViewById(R.id.id_rotation_button);
+        rotationBtn.setOnClickListener(view -> {
+            mRotationDegree = (mRotationDegree + 90) % 360;
+            mWebRTCView.setVideoRotation(mRotationDegree);
+        });
+
+        TextView scaleBtn = mFeatureControlContainerView.findViewById(R.id.id_scale_type_button);
+        scaleBtn.setOnClickListener(view -> {
+            if (mScaleType == SCALE_KEEP_ASPECT_FIT) {
+                mScaleType = SCALE_IGNORE_ASPECT_FILL;
+                scaleBtn.setText(R.string.scale_fill);
+            } else {
+                mScaleType = SCALE_KEEP_ASPECT_FIT;
+                scaleBtn.setText(R.string.scale_fit);
+            }
+            mWebRTCView.setScaleType(mScaleType);
+        });
+    }
+
+    private void takeSnapshot() {
+        mWebRTCView.takeSnapshot(bitmap -> {
+            if (mAnimator != null) {
+                mAnimator.cancel();
+            }
+
+            mSnapshotView.setImageBitmap(bitmap);
+            mSnapshotView.setVisibility(View.VISIBLE);
+            mSnapshotView.setTranslationY(0);
+            mSnapshotView.setScaleX(1.0f);
+            mSnapshotView.setScaleY(1.0f);
+
+            float scale = 0.4f;
+            float y = mFeatureControlContainerView.getY() - mSnapshotView.getHeight();
+            ObjectAnimator down = ObjectAnimator.ofFloat(mSnapshotView, "y", y);
+            ObjectAnimator scaleX = ObjectAnimator.ofFloat(mSnapshotView, "scaleX", scale);
+            ObjectAnimator scaleY = ObjectAnimator.ofFloat(mSnapshotView, "scaleY", scale);
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.playTogether(down, scaleX, scaleY);
+            animatorSet.playTogether(down);
+            animatorSet.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mSnapshotView.setVisibility(View.INVISIBLE);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+            animatorSet.setDuration(1000);
+            animatorSet.setInterpolator(new DecelerateInterpolator(1));
+            animatorSet.start();
+            mAnimator = animatorSet;
+        }, 1.0f);
+    }
 }
