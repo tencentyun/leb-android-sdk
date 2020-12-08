@@ -1,5 +1,11 @@
 ## leb android sdk release history
 
+### v2.0.2
+    1. 支持画面截图
+    2. 支持旋转显示
+    3. 支持等比例缩放和平铺缩放
+    4. 支持音频增益设置
+
 ### v2.0.1
     扩展标准WebRTC，支持如下特性：
     1. 支持AAC，包括LC、HE和HEv2
