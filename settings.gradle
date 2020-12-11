@@ -1,2 +1,2 @@
-include ':app', ':lebwebrtcsdk'
+include ':app'
 rootProject.name='leb_android_sdk'

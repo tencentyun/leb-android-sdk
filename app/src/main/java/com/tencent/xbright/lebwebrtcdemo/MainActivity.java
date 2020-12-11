@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // bugly初始化
         CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(getApplicationContext());
         strategy.setAppChannel("myChannel");  //设置渠道
-        strategy.setAppVersion("2.0.1");      //App的版本, 这里设置了SDK version
+        strategy.setAppVersion("2.0.2");      //App的版本, 这里设置了SDK version
         strategy.setAppPackageName("com.tencent.xbright.lebwebrtcdemo");  //App的包名
         CrashReport.initCrashReport(getApplicationContext(), "e3243444c9", false, strategy);
 
