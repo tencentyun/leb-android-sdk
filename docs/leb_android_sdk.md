@@ -131,19 +131,20 @@ LEBWebRTCParameters构造见下面示例：
             STATE_ICE_COMPLETED,
             // 连接建立
             STATE_WEBRTC_CONNECTED,
-            // 渲染首帧
+            // 渲染第一帧
             STATE_FIRST_FRAME_RENDERED,
             // 连接超时
             STATE_WEBRTC_TIMEOUT,
         }
-   
         // offer创建成功
         void onEventOfferCreated(String sdp);
         // 连接成功
         void onEventConnected();
         // 连接失败
-        void onEventConnectFailed(ConnectionStats state, String error);
-        // 断开断开
+        void onEventConnectFailed(ConnectionState cs);
+        // 连接断开
+        void onEventDisconnect();
+        // 收到首包数据
         void onEventFirstPacketReceived(int mediType);//0:audio, 1:video
         // 渲染首帧
         void onEventFirstFrameRendered();
@@ -152,30 +153,36 @@ LEBWebRTCParameters构造见下面示例：
         // 统计数据
         void onEventStatsReport(LEBWebRTCStatsReport webRTCStatsReport);
         // sei回调，解码线程，不要阻塞，没有start code
-        // 启用需设置enableSEICallback(true)，默认不回调
         void onEventSEIReceived(ByteBuffer data);
     }
     其中onEventStatsReport(LEBWebRTCStatsReport webRTCStatsReport)用来回调播放状态，包含音视频播放性能、播放帧率、码率和时长等数据，LEBWebRTCStatsReport定义如下:
 
     public class LEBWebRTCStatsReport {
-        // video stats
-        public long   mFirstVideoPacketDelay; //从启动到收到第一包视频数据的延时
-        public long   mFirstFrameRenderDelay; //从启动到首帧渲染延时
-        public double mFramerate; //解码帧率
+        //video stats
+        public long   mFirstVideoPacketDelayMs;//从启动到收到第一包视频数据的延时
+        public long   mFirstFrameRenderDelayMs; //从启动到首帧渲染延时
+        public float  mVideoDecodeFps; //解码帧率
+        public float  mVideoDecoderAvgFps;//平均帧率
+        public float  mVideoRenderFps;      // 视频渲染帧率
+        public long   mVideoRenderReceived; // 视频渲染收到的帧率
+        public long   mVideoRenderDropped;  // 渲染时丢弃的帧数
+        public long mTotalFrozenTimeMs; // 总卡顿时长
+        public float  mFrozenRate; // 总卡顿时长/播放时长
         public long   mVideoBitrate; //视频码率
         public long   mFramesDecoded; //解码帧数
         public long   mFramesDropped; //丢帧数
         public long   mFramesReceived; //接收帧数
-        public int    mPacketsLost; //丢包个数
+        public int    mVideoPacketsLost; //丢包个数
+        public long   mVideoPacketsReceived; //接收包数
         public long   mFrameWidth; //视频宽度
         public long   mFrameHeight; //视频高度
         public long   mVideoDelayMs;
-        public long   mVdieoJitterBufferDelayMs;
+        public long   mVideoJitterBufferDelayMs;
         public long   mVideoNacksSent;
         public long   mRTT;
 
         //audio stats
-        public long   mFirstAudioPacketDelay;//从启动到收到第一包音频数据的延时
+        public long   mFirstAudioPacketDelayMs;//从启动到收到第一包音频数据的延时
         public int    mAudioPacketsLost; //丢包个数
         public long   mAudioPacketsReceived; //接收包数
         public long   mAudioBitrate;//音频码率
@@ -184,9 +191,8 @@ LEBWebRTCParameters构造见下面示例：
         public long   mAudioNacksSent;
 
         //play stats
-        public double mAverageFrameRate;//平均帧率
         public long   mAverageBitRate;//平均码率
-        public long   mPlayTime;//播放时长
+        public long   mPlayTimeMs;//播放时长
     }
 
 
