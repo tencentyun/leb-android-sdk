@@ -12,15 +12,15 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.tencent.xbright.lebwebrtcsdk.LEBWebRTCView;
 import com.tencent.xbright.lebwebrtcsdk.LEBWebRTCStatsReport;
 import com.tencent.xbright.lebwebrtcsdk.LEBWebRTCEvents;
-import com.tencent.xbright.lebwebrtcsdk.LEBWebRTCView;
+import com.tencent.xbright.lebwebrtcsdk.LEBWebRTCTextureView;
 import com.tencent.xbright.lebwebrtcsdk.LEBWebRTCParameters;
 
 import org.json.JSONException;
@@ -44,9 +44,10 @@ import static com.tencent.xbright.lebwebrtcsdk.LEBWebRTCView.SCALE_KEEP_ASPECT_F
 
 public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRTCEvents {
     private static final String TAG = "WebRTCDemoActivity";
+    private static final boolean USE_SURFACEVIEW = true;
     private String              mWebRTCUrl;
     private LEBWebRTCParameters mLEBWebRTCParameters;
-    private LEBWebRTCView       mWebRTCView;
+    private LEBWebRTCView    mWebRTCView;
     private TextView         mStatsView;
     private ImageView        mSnapshotView;
     private View             mFeatureControlContainerView;
@@ -105,6 +106,26 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
         mLEBWebRTCParameters = new LEBWebRTCParameters();
         mLEBWebRTCParameters.setStreamUrl(mWebRTCUrl);
         mLEBWebRTCParameters.setLoggingSeverity(LEBWebRTCParameters.LOG_NONE);
+        mLEBWebRTCParameters.setLoggable((String tag, int level, String message) -> {
+            final String t = "[lebwebrtc]" + tag;
+            switch (level) {
+                case LEBWebRTCParameters.LOG_VERBOSE:
+                    Log.v(t, message);
+                    break;
+                case LEBWebRTCParameters.LOG_INFO:
+                    Log.i(t, message);
+                    break;
+                case LEBWebRTCParameters.LOG_WARNING:
+                    Log.w(t, message);
+                    break;
+                case LEBWebRTCParameters.LOG_ERROR:
+                    Log.e(t, message);
+                    break;
+                default:
+                    Log.i(t, message);
+                    break;
+            }
+        });
         mLEBWebRTCParameters.enableHwDecode(mEnableHwDecode);
         mLEBWebRTCParameters.disableEncryption(mDisableEncryption);
         mLEBWebRTCParameters.enableSEICallback(mEnableSEICallback);
@@ -112,7 +133,13 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
         mLEBWebRTCParameters.setStatsReportPeriodInMs(1000);
         mLEBWebRTCParameters.setAudioFormat(mAudioFormat);
 
-        mWebRTCView = findViewById(R.id.id_surface_view);
+        if (USE_SURFACEVIEW) {
+            mWebRTCView = findViewById(R.id.id_surface_view);
+        } else {
+            LEBWebRTCTextureView webRTCTextureView = findViewById(R.id.id_texture_view);
+            webRTCTextureView.setVisibility(View.VISIBLE);
+            mWebRTCView = webRTCTextureView;
+        }
         mWebRTCView.initilize(mLEBWebRTCParameters, this);
         mWebRTCView.setScaleType(mScaleType);
     }
@@ -136,9 +163,15 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
         Log.v(TAG, "onStop");
         super.onStop();
         mWebRTCView.stopPlay();
-        mWebRTCView.release();
         // 可以不调signalStop(), 后台在连接断开后会保底停止下发数据和计费
         signalingStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.v(TAG, "onDestroy");
+        super.onDestroy();
+        mWebRTCView.release();
     }
 
     private void makeFullScreen() {

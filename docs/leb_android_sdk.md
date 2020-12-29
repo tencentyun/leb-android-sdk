@@ -40,6 +40,40 @@
 
 ## 3. SDK接口
     SDK封装类为LEBWebRTCView
+    public interface LEBWebRTCView extends VideoSink {
+        // 保留视频宽高比
+        int SCALE_KEEP_ASPECT_FIT = 0;
+        // 填充view，不保留宽高比
+        int SCALE_IGNORE_ASPECT_FILL = 1;
+        //初始化sdk
+        void initilize(@NonNull LEBWebRTCParameters rtcParams, @NonNull LEBWebRTCEvents rtcEvents);
+        //获取context
+        Context getContext();
+        //设置remote sdp
+        void setRemoteSDP(String sdp);
+        //开始播放
+        void startPlay();
+        //暂停播放
+        void pausePlay();
+        //停止播放
+        void stopPlay();
+        //释放资源
+        void release();
+        //静音播放
+        void mutePlay(boolean isMute);
+        //设置PCM音量增益
+        void setVolume(double volume);
+        //设置画面旋转角度，90、180、270
+        void setVideoRotation(int degree);
+        //截图接口
+        void takeSnapshot(@NonNull SnapshotListener listener, float scale);
+        //设置缩放模式SCALE_KEEP_ASPECT_FIT和SCALE_IGNORE_ASPECT_FILL
+        void setScaleType(int scaleType);
+        //截图回调
+        interface SnapshotListener {
+            void onSnapshot(Bitmap bitmap);
+        }
+    }
 ### 3.1 初始化
     LEBWebRTCView mWebRTCView = findViewById(R.id.id_surface_view);
 
@@ -57,7 +91,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:keepScreenOn="true">
-        <com.tencent.xbright.lebwebrtcsdk.LEBWebRTCView
+        <com.tencent.xbright.lebwebrtcsdk.LEBWebRTCSurfaceView
             android:id="@+id/id_surface_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -110,15 +144,36 @@ LEBWebRTCParameters构造见下面示例：
     mLEBWebRTCParameters.setConnectionTimeOutInMs(5000);
     //设置播放状态回调事件周期，默认为1000ms
     mLEBWebRTCParameters.setStatsReportPeriodInMs(1000);
-    //设置日志级别，默认为LOG_NONE
-    mLEBWebRTCParameters.setLoggingSeverity(LEBWebRTCParameters.LOG_NONE);
     //设置是否关闭加密，默认为打开加密
     mLEBWebRTCParameters.disableEncryption(mDisableEncryption);
     //设置是否启用SEI回调，默认为关闭
     mLEBWebRTCParameters.enableSEICallback(mEnableSEICallback);
     //设置拉流音频格式，LEBWebRTCParameters.OPUS, LEBWebRTCParameters.AAC_LATM, LEBWebRTCParameters.AAC_ADTS
     mLEBWebRTCParameters.setAudioFormat(mAudioFormat);
-
+    //设置日志级别，默认为LOG_NONE
+    mLEBWebRTCParameters.setLoggingSeverity(LEBWebRTCParameters.LOG_NONE);
+    //设置日志回调
+    mLEBWebRTCParameters.setLoggable((String tag, int level, String message) -> {
+        final String t = "[lebwebrtc]" + tag;
+        switch (level) {
+            case LEBWebRTCParameters.LOG_VERBOSE:
+                Log.v(t, message);
+                break;
+            case LEBWebRTCParameters.LOG_INFO:
+                Log.i(t, message);
+                break;
+            case LEBWebRTCParameters.LOG_WARNING:
+                Log.w(t, message);
+                break;
+            case LEBWebRTCParameters.LOG_ERROR:
+                Log.e(t, message);
+                break;
+            default:
+                Log.i(t, message);
+                break;
+        }
+    });
+    
     LEBWebRTCEvents事件回调定义如下：
     public interface LEBWebRTCEvents {
         enum ConnectionState
@@ -194,6 +249,8 @@ LEBWebRTCParameters构造见下面示例：
         public long   mAverageBitRate;//平均码率
         public long   mPlayTimeMs;//播放时长
     }
+    
+    
 
 
 ### 3.1 启动过程

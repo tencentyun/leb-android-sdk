@@ -8,7 +8,7 @@
     android:background="@android:color/darker_gray"
     android:keepScreenOn="true">
 
-    <com.tencent.xbright.lebwebrtcsdk.LEBWebRTCView
+    <com.tencent.xbright.lebwebrtcsdk.LEBWebRTCSurfaceView
         android:id="@+id/id_surface_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -17,6 +17,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintDimensionRatio="1:1"
+        />
+
+    <com.tencent.xbright.lebwebrtcsdk.LEBWebRTCTextureView
+        android:id="@+id/id_texture_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        android:visibility="gone"
         />
 
     <TextView
