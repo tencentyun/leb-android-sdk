@@ -1,5 +1,13 @@
 ## leb android sdk release history
 
+### v2.0.4
+    1. 修复不设置日志回调时crash问题
+
+### v2.0.3
+    1. 重构接口, LEBWebRTCView变为接口类，增加LEBWebRTCSurfaceView和LEBWebRTCTextureView
+    2. 支持日志回调
+    3. 修复切后台再切前台黑屏问题
+
 ### v2.0.2
     1. 支持画面截图
     2. 支持旋转显示

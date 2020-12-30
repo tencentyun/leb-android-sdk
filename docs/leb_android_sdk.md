@@ -20,7 +20,7 @@
     }
     然后，在相关module的build.gradle中加⼊入依赖
     dependencies {
-        implementation 'com.tencent.xbright:lebwebrtcsdk:2.0.2'
+        implementation 'com.tencent.xbright:lebwebrtcsdk:2.0.4'
     }
 
 ### 2.3 SO库的ABI说明
