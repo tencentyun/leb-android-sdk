@@ -1,5 +1,9 @@
 ## leb android sdk release history
 
+### v2.0.5
+    1. 增加最大音频JitterBuffer队列大小设置接口
+    2. 增加追帧功能开关接口
+
 ### v2.0.4
     1. 修复不设置日志回调时crash问题
 

@@ -20,7 +20,7 @@
     }
     然后，在相关module的build.gradle中加⼊入依赖
     dependencies {
-        implementation 'com.tencent.xbright:lebwebrtcsdk:2.0.4'
+        implementation 'com.tencent.xbright:lebwebrtcsdk:2.0.5'
     }
 
 ### 2.3 SO库的ABI说明
@@ -128,8 +128,12 @@ LEBWebRTCParameters定义如下：
     // WebRTC连接超时
     private int mConnectoionTimeoutInMs = 5000;//ms
 
-    // 默认音频PCM增益，0~10.0，增益过大会使PCM过饱和
+    // 音频PCM增益，0~10.0，增益过大会使PCM过饱和
     private double mDefaultVolume = 1.0f;
+    // 音频最大队列，会影响最大延时
+    private int mAudioJitterBufferMaxPackets = 50;
+    // 是否开启追帧功能
+    private boolean mEnableAudioJitterBufferFastAccelerate = true;
     ...
     }
 LEBWebRTCParameters构造见下面示例：
@@ -148,6 +152,10 @@ LEBWebRTCParameters构造见下面示例：
     mLEBWebRTCParameters.disableEncryption(mDisableEncryption);
     //设置是否启用SEI回调，默认为关闭
     mLEBWebRTCParameters.enableSEICallback(mEnableSEICallback);
+    //设置音频JitterbBuffer队列大小，默认为50
+    mLEBWebRTCParameters.setAudioJitterBufferMaxPackets(50);
+    //设置是否开启追帧功能，默认开启
+    mLEBWebRTCParameters.enableAudioJitterBufferFastAccelerate(true);
     //设置拉流音频格式，LEBWebRTCParameters.OPUS, LEBWebRTCParameters.AAC_LATM, LEBWebRTCParameters.AAC_ADTS
     mLEBWebRTCParameters.setAudioFormat(mAudioFormat);
     //设置日志级别，默认为LOG_NONE
@@ -368,7 +376,7 @@ LEBWebRTCParameters构造见下面示例：
 
     CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(getApplicationContext());
     strategy.setAppChannel("myChannel");  //设置渠道
-    strategy.setAppVersion("2.0.1");      //App的版本, 这里设置了SDK version
+    strategy.setAppVersion("2.0.5");      //App的版本, 这里设置了SDK version
     strategy.setAppPackageName("com.tencent.xbright.lebwebrtcdemo");  //App的包名
     CrashReport.initCrashReport(getApplicationContext(), "e3243444c9", false, strategy);
 

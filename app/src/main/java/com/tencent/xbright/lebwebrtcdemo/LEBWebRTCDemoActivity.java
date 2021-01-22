@@ -105,7 +105,7 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
                 " enableSEICallback: " + mEnableSEICallback);
         mLEBWebRTCParameters = new LEBWebRTCParameters();
         mLEBWebRTCParameters.setStreamUrl(mWebRTCUrl);
-        mLEBWebRTCParameters.setLoggingSeverity(LEBWebRTCParameters.LOG_NONE);
+        mLEBWebRTCParameters.setLoggingSeverity(LEBWebRTCParameters.LOG_INFO);
         mLEBWebRTCParameters.setLoggable((String tag, int level, String message) -> {
             final String t = "[lebwebrtc]" + tag;
             switch (level) {
@@ -131,6 +131,8 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
         mLEBWebRTCParameters.enableSEICallback(mEnableSEICallback);
         mLEBWebRTCParameters.setConnectionTimeOutInMs(5000);//5s
         mLEBWebRTCParameters.setStatsReportPeriodInMs(1000);
+        mLEBWebRTCParameters.setAudioJitterBufferMaxPackets(50);
+        mLEBWebRTCParameters.enableAudioJitterBufferFastAccelerate(true);
         mLEBWebRTCParameters.setAudioFormat(mAudioFormat);
 
         if (USE_SURFACEVIEW) {
