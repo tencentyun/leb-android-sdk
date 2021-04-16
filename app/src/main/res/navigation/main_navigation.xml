@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@+id/navigation_playback">
+
+    <fragment
+        android:id="@+id/navigation_playback"
+        android:name="com.tencent.xbright.lebwebrtcdemo.main.PlaybackTabFragment"
+        tools:layout="@layout/fragment_playback_tab"
+        />
+
+    <fragment
+        android:id="@+id/navigation_publish"
+        android:name="com.tencent.xbright.lebwebrtcdemo.main.PublishTabFragment"
+        tools:layout="@layout/fragment_publish_tab"
+        />
+
+</navigation>

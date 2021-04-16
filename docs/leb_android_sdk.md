@@ -134,6 +134,10 @@ LEBWebRTCParameters定义如下：
     private int mAudioJitterBufferMaxPackets = 50;
     // 是否开启追帧功能
     private boolean mEnableAudioJitterBufferFastAccelerate = true;
+    // 是否拉音频流
+    private boolean mReceiveAudio = true;
+    // 是否拉视频流
+    private boolean mReceiveVideo = true;
     ...
     }
 LEBWebRTCParameters构造见下面示例：
@@ -156,6 +160,10 @@ LEBWebRTCParameters构造见下面示例：
     mLEBWebRTCParameters.setAudioJitterBufferMaxPackets(50);
     //设置是否开启追帧功能，默认开启
     mLEBWebRTCParameters.enableAudioJitterBufferFastAccelerate(true);
+    //设置是否拉音频流，默认开启
+    mLEBWebRTCParameters.enableReceiveAudio(true);
+    //设置是否拉视频流，默认开启
+    mLEBWebRTCParameters.enableReceiveVideo(true);
     //设置拉流音频格式，LEBWebRTCParameters.OPUS, LEBWebRTCParameters.AAC_LATM, LEBWebRTCParameters.AAC_ADTS
     mLEBWebRTCParameters.setAudioFormat(mAudioFormat);
     //设置日志级别，默认为LOG_NONE

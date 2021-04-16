@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginLeft="@dimen/margin_horizontal"
+    android:layout_marginRight="@dimen/margin_horizontal"
+    >
+
+    <TextView
+        android:id="@+id/textViewKey"
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="码流URL"
+        android:layout_gravity="center_horizontal"
+        android:textSize="@dimen/title_text_size" />
+
+    <EditText
+        android:hint="请输入webrtc://xxxx，或直接点下面按钮开始默认播放"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/stream_url"
+        android:textSize="10sp"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="信令URL"
+        android:layout_gravity="center_horizontal"
+        android:textSize="@dimen/title_text_size" />
+
+    <EditText
+        android:hint="请输入https://xxxx/pullstream, 或使直接用默认"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/signal_url"
+        android:textSize="10sp"
+        android:layout_gravity="center_horizontal"/>
+
+    <Switch
+        android:id="@+id/video_hwaccel_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:layout_marginTop="@dimen/margin_top"
+        android:text="视频硬件解码(H264和H265):"
+        android:textColor="@android:color/tab_indicator_text"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top"
+        android:text="播放模式:" />
+
+    <RadioGroup
+        android:id="@+id/play_mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <RadioButton
+            android:id="@+id/play_normal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"
+            android:checked="true"
+            android:text="Normal"
+            android:singleLine="true"
+            android:textSize="10sp"/>
+
+        <RadioButton
+            android:id="@+id/play_audio_only"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:text="Audio Only"
+            android:singleLine="false"
+            android:textSize="10sp"/>
+
+        <RadioButton
+            android:id="@+id/play_video_only"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:singleLine="false"
+            android:text="Video Only"
+            android:textSize="10sp"/>
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top"
+        android:text="Audio格式:" />
+
+    <RadioGroup
+        android:id="@+id/audio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <RadioButton
+            android:id="@+id/opus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"
+            android:checked="true"
+            android:text="OPUS"
+            android:singleLine="true"
+            android:textSize="10sp"/>
+
+        <RadioButton
+            android:id="@+id/aac_latm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:text="AAC\n(MP4A-LATM)"
+            android:singleLine="false"
+            android:textSize="10sp"/>
+
+        <RadioButton
+            android:id="@+id/aac_adts"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:singleLine="false"
+            android:text="AAC\n(MP4A-ADTS)"
+            android:textSize="10sp"/>
+
+    </RadioGroup>
+
+    <Switch
+        android:id="@+id/encrypted_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top"
+        android:checked="true"
+        android:text="加密:"
+        android:textColor="@android:color/tab_indicator_text"
+        />
+
+    <Switch
+        android:id="@+id/sei_callback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top"
+        android:text="SEI回调:"
+        android:checked="false"
+        android:textColor="@android:color/tab_indicator_text"
+        />
+
+    <Button
+        android:id="@+id/connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:text="开始拉流" />
+
+</LinearLayout>

@@ -1,191 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.tencent.xbright.lebwebrtcdemo.MainActivity">
+    tools:context="com.tencent.xbright.lebwebrtcdemo.main.MainActivity">
 
-    <TextView
-        android:id="@+id/textViewKey"
-        android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="码流URL"
-        android:layout_gravity="center_horizontal"
-        android:textSize="15sp" />
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:menu="@menu/bottom_nav_menu"
+        />
 
-    <EditText
-        android:hint="请输入webrtc://xxxx，或直接点下面按钮开始默认播放"
+    <fragment
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/streamurl"
-        android:textSize="10sp"
-        android:layout_gravity="center_horizontal"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="信令URL"
-        android:layout_gravity="center_horizontal"
-        android:textSize="15sp" />
-
-    <EditText
-        android:hint="请输入https://xxxx/pullstream, 或使直接用默认"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:id="@+id/pullurl"
-        android:textSize="10sp"
-        android:layout_gravity="center_horizontal"/>
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:text="Video解码器(H264和H265):" />
-
-    <RadioGroup
-        android:id="@+id/video"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="20dp">
-
-        <RadioButton
-            android:id="@+id/hw_decode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:checked="true"
-            android:text="硬解"
-            android:textSize="10sp"/>
-
-        <RadioButton
-            android:id="@+id/sw_decode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_weight="3"
-            android:text="软解"
-            android:textSize="10sp"/>
-
-    </RadioGroup>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:text="Audio格式:" />
-
-    <RadioGroup
-        android:id="@+id/audio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="20dp">
-        <RadioButton
-            android:id="@+id/opus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:checked="true"
-            android:text="OPUS"
-            android:textSize="10sp"/>
-
-        <RadioButton
-            android:id="@+id/aac_latm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_weight="3"
-            android:text="AAC (MP4A-LATM)"
-            android:textSize="10sp"/>
-
-        <RadioButton
-            android:id="@+id/aac_adts"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_weight="3"
-            android:text="AAC (MP4A-ADTS)"
-            android:textSize="10sp"/>
-
-    </RadioGroup>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:text="加密:" />
-
-    <RadioGroup
-        android:id="@+id/encrypted"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="20dp">
-        <RadioButton
-            android:id="@+id/on"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:checked="true"
-            android:text="开"
-            android:textSize="10sp"/>
-
-        <RadioButton
-            android:id="@+id/off"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_weight="3"
-            android:text="关"
-            android:textSize="10sp"/>
-    </RadioGroup>>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:text="SEI回调:" />
-
-    <RadioGroup
-        android:id="@+id/sei_callback"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="20dp">
-        <RadioButton
-            android:id="@+id/sei_on"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="开"
-            android:textSize="10sp"/>
-
-        <RadioButton
-            android:id="@+id/sei_off"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_weight="3"
-            android:checked="true"
-            android:text="关"
-            android:textSize="10sp"/>
-    </RadioGroup>>
-
-    <Button
-        android:id="@+id/connect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_gravity="center_horizontal"
-        android:text="开始拉流" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@id/nav_view"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/main_navigation" />
+</androidx.constraintlayout.widget.ConstraintLayout>
