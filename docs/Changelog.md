@@ -1,5 +1,14 @@
 ## leb android sdk release history
 
+### v2.0.9
+    1. 增加最小jitter delay限制接口
+    2. 修复一些问题
+
+### v2.0.8
+    1. 支持audio only and video only播放模式
+    2. 增加视频解码器状态回调接
+    3. 整理demo代码
+
 ### v2.0.5
     1. 增加最大音频JitterBuffer队列大小设置接口
     2. 增加追帧功能开关接口

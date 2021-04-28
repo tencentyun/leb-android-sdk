@@ -156,8 +156,8 @@ LEBWebRTCParameters构造见下面示例：
     mLEBWebRTCParameters.disableEncryption(mDisableEncryption);
     //设置是否启用SEI回调，默认为关闭
     mLEBWebRTCParameters.enableSEICallback(mEnableSEICallback);
-    //设置音频JitterbBuffer队列大小，默认为50
-    mLEBWebRTCParameters.setAudioJitterBufferMaxPackets(50);
+    //设置最小JitterDelay，默认为1000ms，越大越能对抗网络抖动，按场景需要设置
+    mLEBWebRTCParameters.setMinJitterDelayMs(1000);
     //设置是否开启追帧功能，默认开启
     mLEBWebRTCParameters.enableAudioJitterBufferFastAccelerate(true);
     //设置是否拉音频流，默认开启
