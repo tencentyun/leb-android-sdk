@@ -37,6 +37,9 @@ public class PlaybackTabFragment extends Fragment {
     private boolean receiveAudio = true;
     private boolean receiveVideo = true;
 
+    private EditText minJitterDelayText;
+    private int minJitterDelayMs = 1000;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_playback_tab, container, false);
@@ -52,6 +55,9 @@ public class PlaybackTabFragment extends Fragment {
         streamUrlText.setHint(streamUrl);
         pullUrlText = view.findViewById(R.id.signal_url);
         pullUrlText.setHint(pullUrl);
+
+        minJitterDelayText = view.findViewById(R.id.min_delay);
+        minJitterDelayText.setHint(String.valueOf(minJitterDelayMs));
 
         RadioGroup playMode = view.findViewById(R.id.play_mode);
         playMode.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -108,6 +114,10 @@ public class PlaybackTabFragment extends Fragment {
             pullUrl = pullUrlText.getText().toString();
 
         }
+        if (!minJitterDelayText.getText().toString().isEmpty()) {
+            minJitterDelayMs = Integer.parseInt(minJitterDelayText.getText().toString());
+        }
+
         String stream = streamUrl.replace("livepush", "liveplay");
         View root = getView();
         DemoActivityParameter parameter = new DemoActivityParameter();
@@ -117,6 +127,7 @@ public class PlaybackTabFragment extends Fragment {
         parameter.mReceiveVideo = receiveVideo;
         parameter.mSEICallback = ((Switch)root.findViewById(R.id.sei_callback)).isChecked();
         parameter.mAudioFormat = audioFormat;
+        parameter.mMinJitterDelayMs = minJitterDelayMs;
         parameter.mPlaybackStreamUrl = stream;
         parameter.mPlaybackPullUrl = pullUrl;
         parameter.mPlaybackStopUrl = stopUrl;

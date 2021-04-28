@@ -18,6 +18,7 @@ public class DemoActivityParameter implements Parcelable {
 
     public int mAudioFormat = LEBWebRTCParameters.OPUS;
 
+    public int mMinJitterDelayMs = 1000;
     public String mPlaybackStreamUrl;
     public String mPlaybackPullUrl;
     public String mPlaybackStopUrl;
@@ -32,6 +33,7 @@ public class DemoActivityParameter implements Parcelable {
         mReceiveVideo = in.readByte() != 0;
         mSEICallback = in.readByte() != 0;
         mAudioFormat = in.readInt();
+        mMinJitterDelayMs = in.readInt();
         mPlaybackStreamUrl = in.readString();
         mPlaybackPullUrl = in.readString();
         mPlaybackStopUrl = in.readString();
@@ -45,6 +47,7 @@ public class DemoActivityParameter implements Parcelable {
         dest.writeByte((byte) (mReceiveVideo ? 1 : 0));
         dest.writeByte((byte) (mSEICallback ? 1 : 0));
         dest.writeInt(mAudioFormat);
+        dest.writeInt(mMinJitterDelayMs);
         dest.writeString(mPlaybackStreamUrl);
         dest.writeString(mPlaybackPullUrl);
         dest.writeString(mPlaybackStopUrl);

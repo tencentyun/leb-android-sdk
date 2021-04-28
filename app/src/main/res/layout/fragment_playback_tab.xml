@@ -159,6 +159,19 @@
         android:textColor="@android:color/tab_indicator_text"
         />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top"
+        android:text="JitterBuffer最小延时:" />
+    <EditText
+        android:hint="1000"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/min_delay"
+        android:textSize="10sp"
+        android:layout_gravity="center_horizontal"/>
+
     <Button
         android:id="@+id/connect"
         android:layout_width="wrap_content"

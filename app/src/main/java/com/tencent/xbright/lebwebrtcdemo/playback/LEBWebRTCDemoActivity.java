@@ -100,6 +100,7 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
                 " receiveVideo: " + mParameter.mReceiveVideo +
                 " seiCallback: " + mParameter.mSEICallback +
                 " audioFormat: " + mParameter.mAudioFormat +
+                " minJitterDelay: " + mParameter.mMinJitterDelayMs +
                 " streamUrl: " + mParameter.mPlaybackStreamUrl +
                 " pullUrl: " + mParameter.mPlaybackPullUrl);
         mLEBWebRTCParameters = new LEBWebRTCParameters();
@@ -114,7 +115,7 @@ public class LEBWebRTCDemoActivity extends AppCompatActivity implements LEBWebRT
         mLEBWebRTCParameters.setAudioFormat(mParameter.mAudioFormat);
         mLEBWebRTCParameters.setConnectionTimeOutInMs(5000);//5s
         mLEBWebRTCParameters.setStatsReportPeriodInMs(1000);
-        mLEBWebRTCParameters.setAudioJitterBufferMaxPackets(50);
+        mLEBWebRTCParameters.setMinJitterDelayMs(mParameter.mMinJitterDelayMs);
         mLEBWebRTCParameters.enableAudioJitterBufferFastAccelerate(true);
 
         if (USE_SURFACEVIEW) {
