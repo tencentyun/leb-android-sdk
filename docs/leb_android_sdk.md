@@ -232,12 +232,12 @@ LEBWebRTCParameters构造见下面示例：
         //video stats
         public long   mFirstVideoPacketDelayMs;//从启动到收到第一包视频数据的延时
         public long   mFirstFrameRenderDelayMs; //从启动到首帧渲染延时
-        public float  mVideoDecodeFps; //解码帧率
+        public float  mVideoDecodeFps; //当前解码帧率
         public float  mVideoDecoderAvgFps;//平均帧率
-        public float  mVideoRenderFps;      // 视频渲染帧率
-        public long   mVideoRenderReceived; // 视频渲染收到的帧率
+        public float  mVideoRenderFps;      // 当前视频渲染帧率
+        public long   mVideoRenderReceived; // 视频渲染收到的帧数
         public long   mVideoRenderDropped;  // 渲染时丢弃的帧数
-        public long mTotalFrozenTimeMs; // 总卡顿时长
+        public long   mTotalFrozenTimeMs; // 总卡顿时长
         public float  mFrozenRate; // 总卡顿时长/播放时长
         public long   mVideoBitrate; //视频码率
         public long   mFramesDecoded; //解码帧数
