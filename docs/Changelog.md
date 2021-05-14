@@ -1,5 +1,8 @@
 ## leb android sdk release history
 
+### v2.0.10
+    1. 增加统计参数mFromLastFrameRenderedDurationMs和mIsPaused
+
 ### v2.0.9
     1. 增加最小jitter delay限制接口
     2. 修复一些问题

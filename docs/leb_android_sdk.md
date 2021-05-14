@@ -237,6 +237,8 @@ LEBWebRTCParameters构造见下面示例：
         public float  mVideoRenderFps;      // 当前视频渲染帧率
         public long   mVideoRenderReceived; // 视频渲染收到的帧数
         public long   mVideoRenderDropped;  // 渲染时丢弃的帧数
+        public long   mFromLastFrameRenderedDurationMs; //上一帧显示到现在的持续时间
+        public boolean mIsPaused; //超过5秒钟没有收到视频数据
         public long   mTotalFrozenTimeMs; // 总卡顿时长
         public float  mFrozenRate; // 总卡顿时长/播放时长
         public long   mVideoBitrate; //视频码率
